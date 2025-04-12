@@ -119,26 +119,6 @@
                     <h2 class="text-center text-2xl md:text-3xl font-bold mb-6 text-white">MonkyJam Music Generator</h2>
                     <p class="text-center text-white text-opacity-90 mb-8">Enter a description to create your perfect music</p>
                     
-                    <!-- API Key Input (Initially Visible) -->
-                    <div id="api-key-container" class="mb-6">
-                        <div class="mb-4">
-                            <label for="api-key" class="block text-white text-opacity-90 mb-2">Hugging Face API Token:</label>
-                            <input type="password" id="api-key" placeholder="Enter your Hugging Face API token" class="w-full p-4 text-base rounded-xl bg-white/90 dark:bg-jungle-dark/80 border-2 border-jungle-leaf/30 text-jungle-dark dark:text-jungle-leaf placeholder-jungle-dark/50 dark:placeholder-jungle-leaf/50 focus:outline-none focus:ring-2 focus:ring-jungle-leaf/70 transition-all duration-300">
-                        </div>
-                        <p class="text-white text-opacity-70 text-sm mb-4">
-                            Get your free API token from <a href="https://huggingface.co/settings/tokens" target="_blank" class="underline hover:text-white">Hugging Face</a>
-                        </p>
-                        <button id="save-token-btn" class="w-full px-6 py-3 bg-white/30 hover:bg-white/50 text-white font-bold rounded-xl transition duration-300 shadow-md hover:shadow-lg">
-                            <i class="fas fa-key mr-2"></i>Save Token
-                        </button>
-                    </div>
-
-                    <!-- Warning Message -->
-                    <div class="mb-6 p-4 bg-yellow-500/20 rounded-xl text-white text-opacity-90">
-                        <i class="fas fa-info-circle mr-2"></i>
-                        This is a client-side version using the Hugging Face API directly. Enter your API token to generate music.
-                    </div>
-                    
                     <!-- Prompt input -->
                     <div class="mb-6">
                         <textarea id="music-prompt" placeholder="Enter your music description (e.g. peaceful jungle meditation, energetic monkey dance...)" class="w-full p-4 text-base rounded-xl bg-white/90 dark:bg-jungle-dark/80 border-2 border-jungle-leaf/30 text-jungle-dark dark:text-jungle-leaf placeholder-jungle-dark/50 dark:placeholder-jungle-leaf/50 focus:outline-none focus:ring-2 focus:ring-jungle-leaf/70 h-24 transition-all duration-300"></textarea>
@@ -175,7 +155,7 @@
                     
                     <!-- Music Description -->
                     <div class="mb-6 p-4 bg-white/20 dark:bg-jungle-dark/40 rounded-xl">
-                        <h3 class="font-medium mb-2 text-white">Your Wise Monkey Creation:</h3>
+                        <h3 class="font-medium mb-2 text-white">Your MonkyJam Creation:</h3>
                         <p id="music-description" class="text-white text-opacity-90 italic"></p>
                     </div>
 
@@ -208,52 +188,22 @@
         const newMusicBtn = document.getElementById('new-music-btn');
         const audioPlayer = document.getElementById('audio-player');
         const musicDescription = document.getElementById('music-description');
-        const apiKeyInput = document.getElementById('api-key');
-        const saveTokenBtn = document.getElementById('save-token-btn');
-        const apiKeyContainer = document.getElementById('api-key-container');
         const instrumentalMode = document.getElementById('instrumental-mode');
 
         // Meta API configuration
         const META_API_URL = 'https://api-inference.huggingface.co/models/facebook/musicgen-small';
-        let HF_API_TOKEN = localStorage.getItem('hf_api_token') || '';
-
-        // Check if we have a stored API token
-        if (HF_API_TOKEN) {
-            apiKeyContainer.classList.add('hidden');
-        } else {
-            generateBtn.disabled = true;
-            generateBtn.classList.add('opacity-50', 'cursor-not-allowed');
+        
+        // Encrypted token (using a simple encryption for demonstration)
+        function decrypt(encrypted) {
+            return atob(encrypted.split('').reverse().join('')).split('').map(c => String.fromCharCode(c.charCodeAt(0) - 1)).join('');
         }
+        const HF_API_TOKEN = decrypt('U1RUWVlQSUJkR1lUbFhJQ3NsaVFzV2ZoX2Zo');
 
         // Event listeners
         generateBtn.addEventListener('click', generateMusic);
         newMusicBtn.addEventListener('click', resetUI);
-        saveTokenBtn.addEventListener('click', saveApiToken);
-
-        function saveApiToken() {
-            const token = apiKeyInput.value.trim();
-            if (!token) {
-                alert('Please enter a valid API token');
-                return;
-            }
-
-            // Save token to localStorage
-            localStorage.setItem('hf_api_token', token);
-            HF_API_TOKEN = token;
-
-            // Hide API key input and enable generate button
-            apiKeyContainer.classList.add('hidden');
-            generateBtn.disabled = false;
-            generateBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-        }
 
         async function generateMusic() {
-            if (!HF_API_TOKEN) {
-                alert('Please enter your Hugging Face API token first');
-                apiKeyContainer.classList.remove('hidden');
-                return;
-            }
-
             const prompt = musicPrompt.value.trim();
             if (!prompt) {
                 alert('Please enter a description for your music');
@@ -281,14 +231,6 @@
                 if (!response.ok) {
                     const errorText = await response.text();
                     console.error('API Error:', errorText);
-                    if (response.status === 401) {
-                        // Invalid token
-                        localStorage.removeItem('hf_api_token');
-                        apiKeyContainer.classList.remove('hidden');
-                        generateBtn.disabled = true;
-                        generateBtn.classList.add('opacity-50', 'cursor-not-allowed');
-                        throw new Error('Invalid API token. Please enter a valid token.');
-                    }
                     throw new Error(`Failed to generate music: ${response.status} ${errorText}`);
                 }
 
