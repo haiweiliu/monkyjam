@@ -1,0 +1,510 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wise Monkey Music</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        jungle: {
+                            light: '#A4BE7B',
+                            DEFAULT: '#5F8D4E',
+                            dark: '#285430',
+                            brown: '#8C7A5B',
+                            darkBrown: '#594D37',
+                            leaf: '#E5D9B6'
+                        },
+                        monkey: {
+                            fur: '#BF8B67',
+                            dark: '#8B5E34'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'sway': 'sway 4s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        sway: {
+                            '0%, 100%': { transform: 'rotate(-3deg)' },
+                            '50%': { transform: 'rotate(3deg)' },
+                        }
+                    },
+                    backgroundImage: {
+                        'jungle-pattern': "url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cpath d=\"M54.627 0l.83.828-1.415 1.415L51.8 0h2.827zM5.373 0l-.83.828L5.96 2.243 8.2 0H5.374zM48.97 0l3.657 3.657-1.414 1.414L46.143 0h2.828zM11.03 0L7.372 3.657 8.787 5.07 13.857 0H11.03zm32.284 0L49.8 6.485 48.384 7.9l-7.9-7.9h2.83zM16.686 0L10.2 6.485 11.616 7.9l7.9-7.9h-2.83zm20.97 0l9.315 9.314-1.414 1.414L34.828 0h2.83zM22.344 0L13.03 9.314l1.414 1.414L25.172 0h-2.83zM32 0l12.142 12.142-1.414 1.414L30 2.828 18.272 14.556l-1.414-1.414L28 0h4zM.284 0l28 28-1.414 1.414L0 2.544V0h.284zM0 5.373l25.456 25.455-1.414 1.415L0 8.2V5.374zm0 5.656l22.627 22.627-1.414 1.414L0 13.86v-2.83zm0 5.656l19.8 19.8-1.415 1.413L0 19.514v-2.83zm0 5.657l16.97 16.97-1.414 1.415L0 25.172v-2.83zM0 28l14.142 14.142-1.414 1.414L0 30.828V28zm0 5.657L11.314 44.97 9.9 46.386l-9.9-9.9v-2.828zm0 5.657L8.485 47.8 7.07 49.212 0 42.142v-2.83zm0 5.657l5.657 5.657-1.414 1.415L0 47.8v-2.83zm0 5.657l2.828 2.83-1.414 1.413L0 53.456v-2.83zM54.627 60L30 35.373 5.373 60H8.2L30 38.2 51.8 60h2.827zm-5.656 0L30 41.03 11.03 60h2.828L30 43.858 46.142 60h2.83zm-5.656 0L30 46.686 16.686 60h2.83L30 49.515 40.485 60h2.83zm-5.657 0L30 52.343 22.344 60h2.83L30 55.172 34.828 60h2.83zM32 60l-2-2-2 2h4zM59.716 0l-28 28 1.414 1.414L60 2.544V0h-.284zM60 5.373L34.544 30.828l1.414 1.415L60 8.2V5.374zm0 5.656L37.373 33.656l1.414 1.414L60 13.86v-2.83zm0 5.656l-19.8 19.8 1.415 1.413L60 19.514v-2.83zm0 5.657l-16.97 16.97 1.414 1.415L60 25.172v-2.83zM60 28L45.858 42.142l1.414 1.414L60 30.828V28zm0 5.657L48.686 44.97l1.415 1.415 9.9-9.9v-2.828zm0 5.657L51.515 47.8l1.414 1.413 7.07-7.07v-2.83zm0 5.657l-5.657 5.657 1.414 1.415L60 47.8v-2.83zm0 5.657l-2.828 2.83 1.414 1.413L60 53.456v-2.83zM39.9 16.385l1.414-1.414 1.413 1.414-1.414 1.414-1.414-1.414zm-4.243 4.242l1.415-1.414 1.414 1.414-1.414 1.414-1.415-1.414zm-4.242 4.243l1.414-1.414 1.414 1.414-1.414 1.414-1.414-1.414zm-4.243 4.242l1.414-1.414 1.414 1.414-1.414 1.414-1.414-1.414zm-4.243 4.242l1.414-1.414 1.415 1.414-1.415 1.414-1.414-1.414zm-4.242 4.242l1.414-1.414 1.414 1.415-1.414 1.414-1.414-1.415zm-4.242 4.242l1.414-1.414 1.414 1.414-1.414 1.414-1.414-1.414zm-4.243 4.242l1.414-1.414 1.414 1.414-1.414 1.415-1.414-1.415zm-4.242 4.242l1.414-1.414 1.414 1.414-1.414 1.415-1.414-1.415zM16.97 48.97l1.415-1.414 1.414 1.414-1.414 1.415-1.415-1.415zM12.727 52.97l1.414-1.414 1.414 1.414-1.414 1.414-1.414-1.414zM8.485 57.212l1.414-1.413 1.414 1.413-1.414 1.414-1.414-1.414z\" fill=\"%235F8D4E\" fill-opacity=\"0.1\" fill-rule=\"evenodd\"/%3E%3C/svg%3E')"
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Baloo 2', cursive;
+            overflow-x: hidden;
+        }
+        
+        .visualization-bar {
+            transition: height 0.5s ease;
+        }
+        
+        .jungle-gradient {
+            background: linear-gradient(to bottom, rgba(40, 84, 48, 0.8), rgba(95, 141, 78, 0.8));
+        }
+        
+        .dark .jungle-gradient {
+            background: linear-gradient(to bottom, rgba(40, 84, 48, 0.9), rgba(30, 60, 34, 0.9));
+        }
+        
+        /* Animated leaves */
+        .leaf {
+            position: absolute;
+            opacity: 0.7;
+            animation-duration: calc(20s + (var(--leaf-speed) * 10s));
+            animation-name: leafFall;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+        
+        @keyframes leafFall {
+            0% {
+                transform: translateY(-5vh) rotate(0deg);
+            }
+            100% {
+                transform: translateY(105vh) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body class="transition-colors duration-300 bg-jungle-light dark:bg-jungle-dark text-jungle-darkBrown dark:text-jungle-leaf">
+    <!-- Dark mode detection -->
+    <script>
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
+    
+    <!-- Animated jungle leaves background -->
+    <div id="leaves-container" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
+    
+    <!-- Main content -->
+    <div class="relative min-h-screen bg-jungle-pattern p-4 md:p-8 z-10">
+        <div class="max-w-3xl mx-auto pt-6 pb-12">
+            <!-- Monkey icon -->
+            <div class="flex justify-center mb-8">
+                <img src="https://pfst.cf2.poecdn.net/base/image/7318dfa5a91f792ec17f53cd9209c8f07120e936815910ba646e1c4577a5c52a?w=1024&amp;h=1024" alt="Cool Monkey" class="w-40 h-40 md:w-52 md:h-52 object-contain animate-sway drop-shadow-xl">
+            </div>
+            
+            <!-- Input container -->
+            <div class="relative max-w-2xl mx-auto mb-12">
+                <div class="jungle-gradient backdrop-blur-sm rounded-2xl shadow-xl p-8 md:p-10">
+                    <h2 class="text-center text-2xl md:text-3xl font-bold mb-6 text-white">Music from the Wise Monkey</h2>
+                    <p class="text-center text-white text-opacity-90 mb-8">Enter a vibe, emotion, or scene to create your perfect jungle music</p>
+                    
+                    <!-- Prompt input -->
+                    <div class="mb-6">
+                        <textarea id="music-prompt" placeholder="How should your music feel? (e.g. peaceful waterfall meditation, joyful monkey dance, mysterious jungle night...)" class="w-full p-4 text-base rounded-xl bg-white/90 dark:bg-jungle-dark/80 border-2 border-jungle-leaf/30 text-jungle-dark dark:text-jungle-leaf placeholder-jungle-dark/50 dark:placeholder-jungle-leaf/50 focus:outline-none focus:ring-2 focus:ring-jungle-leaf/70 h-24 transition-all duration-300"></textarea>
+                    </div>
+                    
+                    <!-- Generate Button -->
+                    <div class="text-center">
+                        <button id="generate-btn" class="px-8 py-3 bg-jungle-leaf hover:bg-white text-jungle-dark font-bold rounded-xl transition duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1">
+                            <i class="fas fa-music mr-2"></i>Create Jungle Music
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Music Player (Initially Hidden) -->
+            <div id="player-container" class="hidden max-w-2xl mx-auto">
+                <div class="jungle-gradient backdrop-blur-sm rounded-2xl shadow-xl p-8">
+                    <!-- Music Visualization -->
+                    <div class="mb-6 h-32 bg-white/20 dark:bg-jungle-dark/40 rounded-xl p-2 flex items-end justify-center space-x-1">
+                        <div id="visualization" class="flex items-end justify-center space-x-1 w-full h-full">
+                            <!-- Visualization bars will be added here dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Music Description -->
+                    <div class="mb-6 p-4 bg-white/20 dark:bg-jungle-dark/40 rounded-xl">
+                        <h3 class="font-medium mb-2 text-white">Your Wise Monkey Creation:</h3>
+                        <p id="music-description" class="text-white text-opacity-90 italic"></p>
+                    </div>
+
+                    <!-- Player Controls -->
+                    <div class="flex items-center justify-between bg-white/20 dark:bg-jungle-dark/40 rounded-xl p-4">
+                        <div>
+                            <span id="current-time" class="text-sm text-white">0:00</span>
+                            <span class="text-sm text-white text-opacity-80"> / </span>
+                            <span id="total-time" class="text-sm text-white text-opacity-80">0:00</span>
+                        </div>
+                        
+                        <div class="flex items-center space-x-4">
+                            <button id="play-pause-btn" class="w-14 h-14 flex items-center justify-center bg-jungle-leaf hover:bg-white text-jungle-dark rounded-full transition shadow-md">
+                                <i class="fas fa-play text-lg"></i>
+                            </button>
+                            <button id="stop-btn" class="w-10 h-10 flex items-center justify-center bg-white/30 hover:bg-white/60 text-white rounded-full transition">
+                                <i class="fas fa-stop"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="flex items-center">
+                            <button id="volume-btn" class="text-white">
+                                <i class="fas fa-volume-up"></i>
+                            </button>
+                            <input type="range" id="volume" min="0" max="100" value="80" class="w-20 ml-2 accent-jungle-leaf">
+                        </div>
+                    </div>
+                    
+                    <!-- Create New Button -->
+                    <div class="text-center mt-6">
+                        <button id="new-music-btn" class="px-6 py-2 bg-white/30 hover:bg-white/50 text-white rounded-lg transition">
+                            <i class="fas fa-plus mr-2"></i>Create New Music
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Loading Animation (Initially Hidden) -->
+            <div id="loading-container" class="hidden max-w-2xl mx-auto">
+                <div class="jungle-gradient backdrop-blur-sm rounded-2xl shadow-xl p-8 text-center py-12">
+                    <div class="inline-block animate-spin rounded-full h-16 w-16 border-4 border-white border-t-transparent"></div>
+                    <p class="mt-6 text-xl text-white">The Wise Monkey is composing your music...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create animated jungle leaves
+        function createLeaves() {
+            const leavesContainer = document.getElementById('leaves-container');
+            const leafShapes = [
+                '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.5 12C17.5 15.5899 14.5899 18.5 11 18.5C7.41015 18.5 4.5 15.5899 4.5 12C4.5 8.41015 7.41015 5.5 11 5.5C14.5899 5.5 17.5 8.41015 17.5 12Z" stroke="#A4BE7B" stroke-width="2"/></svg>',
+                '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 6L18 13.5L12 21L6 13.5L12 6Z" fill="#5F8D4E" fill-opacity="0.7"/></svg>',
+                '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18C8.68629 18 6 15.3137 6 12Z" fill="#E5D9B6" fill-opacity="0.6"/></svg>'
+            ];
+            
+            for (let i = 0; i < 15; i++) {
+                const leaf = document.createElement('div');
+                leaf.classList.add('leaf');
+                leaf.style.left = `${Math.random() * 100}vw`;
+                leaf.style.setProperty('--leaf-speed', Math.random().toString());
+                leaf.innerHTML = leafShapes[Math.floor(Math.random() * leafShapes.length)];
+                leavesContainer.appendChild(leaf);
+            }
+        }
+        
+        // DOM Elements
+        const musicPrompt = document.getElementById('music-prompt');
+        const generateBtn = document.getElementById('generate-btn');
+        const playerContainer = document.getElementById('player-container');
+        const loadingContainer = document.getElementById('loading-container');
+        const playPauseBtn = document.getElementById('play-pause-btn');
+        const stopBtn = document.getElementById('stop-btn');
+        const currentTimeDisplay = document.getElementById('current-time');
+        const totalTimeDisplay = document.getElementById('total-time');
+        const visualizationContainer = document.getElementById('visualization');
+        const musicDescription = document.getElementById('music-description');
+        const volumeBtn = document.getElementById('volume-btn');
+        const volumeSlider = document.getElementById('volume');
+        const newMusicBtn = document.getElementById('new-music-btn');
+        
+        // Initialize visualization bars
+        const numBars = 32;
+        for (let i = 0; i < numBars; i++) {
+            const bar = document.createElement('div');
+            bar.classList.add('visualization-bar', 'bg-jungle-leaf', 'dark:bg-jungle-leaf', 'rounded-t-sm', 'w-2');
+            bar.style.height = '10%';
+            // Store the index for use in visualization calculations
+            bar.dataset.index = i.toString();
+            visualizationContainer.appendChild(bar);
+        }
+
+        // Create animated leaves background
+        createLeaves();
+
+        // Event Listeners
+        generateBtn.addEventListener('click', generateMusic);
+        playPauseBtn.addEventListener('click', togglePlayPause);
+        stopBtn.addEventListener('click', stopMusic);
+        volumeSlider.addEventListener('input', updateVolume);
+        volumeBtn.addEventListener('click', toggleMute);
+        newMusicBtn.addEventListener('click', () => {
+            playerContainer.classList.add('hidden');
+            document.querySelector('.max-w-2xl.mx-auto.mb-12').classList.remove('hidden');
+            musicPrompt.value = '';
+            musicPrompt.focus();
+        });
+
+        // Variables for music playback simulation
+        let isPlaying = false;
+        let isMuted = false;
+        let currentTime = 0;
+        let totalTime = 0;
+        let playbackInterval;
+        let visualizationInterval;
+        let previousVolume = 80;
+
+        async function generateMusic() {
+            const prompt = musicPrompt.value.trim();
+            
+            if (!prompt) {
+                // Highlight the input field if empty
+                musicPrompt.classList.add('ring-2', 'ring-red-500');
+                setTimeout(() => {
+                    musicPrompt.classList.remove('ring-2', 'ring-red-500');
+                }, 2000);
+                return;
+            }
+            
+            // Hide input container, show loading
+            document.querySelector('.max-w-2xl.mx-auto.mb-12').classList.add('hidden');
+            loadingContainer.classList.remove('hidden');
+            
+            try {
+                // Create the prompt for Claude to generate a music description
+                const claudePrompt = `@Claude-3.7-Sonnet I need a detailed description of a zen/meditation music piece created by a wise monkey guitarist living in the jungle. The music should reflect this vibe: "${prompt}".
+                
+                Describe this music in about 3-4 sentences, focusing on:
+                - How the jungle sounds are incorporated
+                - The emotions it evokes
+                - What instruments are being used (especially acoustic guitar)
+                - How it creates a relaxing atmosphere
+                
+                Be poetic but specific about the sounds. Provide ONLY the description with no explanations or additional text.`;
+                
+                // Send the request to Claude using the Poe API
+                const result = await window.Poe.sendUserMessage(claudePrompt, {
+                    handler: "music-description-handler",
+                    stream: false,
+                    openChat: false
+                });
+                
+                // Register a handler outside the function to avoid any timing issues
+                if (!window.musicHandlerRegistered) {
+                    window.Poe.registerHandler("music-description-handler", (result) => {
+                        if (result.status === "complete" && result.responses.length > 0) {
+                            // Show the player, hide loading animation
+                            loadingContainer.classList.add('hidden');
+                            playerContainer.classList.remove('hidden');
+                            
+                            // Set the music description from Claude's response
+                            musicDescription.textContent = result.responses[0].content.trim();
+                            
+                            // Set up simulated playback (random duration between 2-4 minutes)
+                            const duration = 2 + Math.floor(Math.random() * 3);
+                            setupMusicPlayback(duration);
+                        } else if (result.status === "error") {
+                            handleError("Sorry, there was an error generating your music. Please try again.");
+                        }
+                    });
+                    window.musicHandlerRegistered = true;
+                }
+            } catch (error) {
+                handleError("Sorry, there was an error connecting to the Wise Monkey. Please try again.");
+            }
+        }
+
+        function handleError(message) {
+            loadingContainer.classList.add('hidden');
+            document.querySelector('.max-w-2xl.mx-auto.mb-12').classList.remove('hidden');
+            
+            // Show error message
+            const errorEl = document.createElement('div');
+            errorEl.className = 'text-center mt-4 text-red-500 bg-white/80 dark:bg-jungle-dark/80 p-3 rounded-lg';
+            errorEl.textContent = message;
+            
+            const container = document.querySelector('.max-w-2xl.mx-auto.mb-12');
+            container.appendChild(errorEl);
+            
+            setTimeout(() => {
+                container.removeChild(errorEl);
+            }, 4000);
+        }
+
+        function setupMusicPlayback(durationInMinutes) {
+            // Convert duration to seconds
+            totalTime = durationInMinutes * 60;
+            currentTime = 0;
+            
+            // Update displays
+            updateTimeDisplay();
+            
+            // Start playing automatically
+            togglePlayPause();
+        }
+
+        function togglePlayPause() {
+            if (isPlaying) {
+                pauseMusic();
+            } else {
+                playMusic();
+            }
+        }
+
+        function playMusic() {
+            isPlaying = true;
+            playPauseBtn.innerHTML = '<i class="fas fa-pause text-lg"></i>';
+            
+            // Start time update interval
+            playbackInterval = setInterval(() => {
+                currentTime += 1;
+                if (currentTime >= totalTime) {
+                    stopMusic();
+                    return;
+                }
+                updateTimeDisplay();
+            }, 1000);
+            
+            // Start visualization
+            startVisualization();
+        }
+
+        function pauseMusic() {
+            isPlaying = false;
+            playPauseBtn.innerHTML = '<i class="fas fa-play text-lg"></i>';
+            
+            // Clear intervals
+            clearInterval(playbackInterval);
+            clearInterval(visualizationInterval);
+            
+            // Remove the pulse animation
+            playerContainer.classList.remove('animate-pulse-slow');
+            
+            // Change the "Now Playing" indicator to "Paused"
+            const indicator = document.getElementById('now-playing-indicator');
+            if (indicator) {
+                indicator.innerHTML = '<span class="inline-block h-3 w-3 rounded-full bg-yellow-400 mr-2"></span> Paused';
+            }
+        }
+
+        function stopMusic() {
+            pauseMusic();
+            currentTime = 0;
+            updateTimeDisplay();
+            resetVisualization();
+        }
+
+        function updateTimeDisplay() {
+            currentTimeDisplay.textContent = formatTime(currentTime);
+            totalTimeDisplay.textContent = formatTime(totalTime);
+        }
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+        }
+
+        function startVisualization() {
+            const bars = visualizationContainer.querySelectorAll('.visualization-bar');
+            
+            // Clear previous interval if any
+            if (visualizationInterval) clearInterval(visualizationInterval);
+            
+            // Add "Now Playing" indicator next to the player
+            const nowPlayingIndicator = document.createElement('div');
+            nowPlayingIndicator.classList.add('absolute', 'top-4', 'right-4', 'text-white', 'flex', 'items-center');
+            nowPlayingIndicator.innerHTML = '<span class="animate-pulse inline-block h-3 w-3 rounded-full bg-green-400 mr-2"></span> Now Playing';
+            nowPlayingIndicator.id = 'now-playing-indicator';
+            
+            // Add the indicator if it doesn't exist yet
+            if (!document.getElementById('now-playing-indicator')) {
+                playerContainer.querySelector('.jungle-gradient').appendChild(nowPlayingIndicator);
+            }
+            
+            // Make the player container pulse slightly to indicate activity
+            playerContainer.classList.add('animate-pulse-slow');
+            
+            // Set up new visualization interval with more pronounced animation
+            visualizationInterval = setInterval(() => {
+                bars.forEach(bar => {
+                    // Use the bar's index to create a wave effect
+                    const index = parseInt(bar.dataset.index || '0');
+                    const phase = index * 0.2; // Offset phase for each bar
+                    
+                    // Create a more dynamic and visible animation
+                    const time = Date.now() / 1000;
+                    const baseHeight = 15 + Math.random() * 15; // More stable base
+                    const wave1 = 25 * Math.sin(time * 2 + phase); // Faster wave
+                    const wave2 = 15 * Math.sin(time * 0.5 + phase); // Slower wave
+                    
+                    // Calculate height with combined waves for more organic movement
+                    let height = baseHeight + wave1 + wave2;
+                    
+                    // Ensure height is between 15% and 95% (more visible range)
+                    height = Math.max(15, Math.min(95, height));
+                    
+                    // Apply the height with a subtle transition
+                    bar.style.height = `${height}%`;
+                });
+            }, 100); // Faster refresh rate for smoother animation
+        }
+
+        function resetVisualization() {
+            const bars = visualizationContainer.querySelectorAll('.visualization-bar');
+            bars.forEach(bar => {
+                bar.style.height = '10%';
+            });
+            
+            // Remove the "Now Playing" indicator
+            const indicator = document.getElementById('now-playing-indicator');
+            if (indicator) {
+                indicator.remove();
+            }
+            
+            // Remove pulse animation
+            playerContainer.classList.remove('animate-pulse-slow');
+        }
+
+        function updateVolume() {
+            // In a real player, this would adjust the audio volume
+            const volume = volumeSlider.value;
+            
+            // Update volume icon based on level
+            if (volume == 0) {
+                volumeBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+                isMuted = true;
+            } else if (volume < 50) {
+                volumeBtn.innerHTML = '<i class="fas fa-volume-down"></i>';
+                isMuted = false;
+            } else {
+                volumeBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+                isMuted = false;
+            }
+        }
+
+        function toggleMute() {
+            if (isMuted) {
+                // Unmute - restore previous volume
+                volumeSlider.value = previousVolume;
+                isMuted = false;
+            } else {
+                // Mute - save current volume and set to 0
+                previousVolume = volumeSlider.value;
+                volumeSlider.value = 0;
+                isMuted = true;
+            }
+            updateVolume();
+        }
+    </script>
+
+
+</body></html>

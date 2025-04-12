@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MonkyJam - AI Music Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        // API Configuration - Change this to your deployed backend URL
+        const API_URL = 'http://localhost:8001/generate';
+        
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        jungle: {
+                            light: '#A4BE7B',
+                            DEFAULT: '#5F8D4E',
+                            dark: '#285430',
+                            brown: '#8C7A5B',
+                            darkBrown: '#594D37',
+                            leaf: '#E5D9B6'
+                        },
+                        monkey: {
+                            fur: '#BF8B67',
+                            dark: '#8B5E34'
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'sway': 'sway 4s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        sway: {
+                            '0%, 100%': { transform: 'rotate(-3deg)' },
+                            '50%': { transform: 'rotate(3deg)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Baloo 2', cursive;
+            overflow-x: hidden;
+        }
+        
+        .jungle-gradient {
+            background: linear-gradient(to bottom, rgba(40, 84, 48, 0.8), rgba(95, 141, 78, 0.8));
+        }
+        
+        .dark .jungle-gradient {
+            background: linear-gradient(to bottom, rgba(40, 84, 48, 0.9), rgba(30, 60, 34, 0.9));
+        }
+        
+        .leaf {
+            position: absolute;
+            opacity: 0.7;
+            animation-duration: calc(20s + (var(--leaf-speed) * 10s));
+            animation-name: leafFall;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+        
+        @keyframes leafFall {
+            0% {
+                transform: translateY(-5vh) rotate(0deg);
+            }
+            100% {
+                transform: translateY(105vh) rotate(360deg);
+            }
+        }
+
+        .loading {
+            display: none;
+            position: relative;
+            width: 1.25rem;
+            height: 1.25rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body class="transition-colors duration-300 bg-jungle-light dark:bg-jungle-dark text-jungle-darkBrown dark:text-jungle-leaf">
+    <!-- Dark mode detection -->
+    <script>
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
+    
+    <!-- Animated jungle leaves background -->
+    <div id="leaves-container" class="fixed inset-0 pointer-events-none z-0 overflow-hidden"></div>
+    
+    <!-- Main content -->
+    <div class="relative min-h-screen bg-jungle-pattern p-4 md:p-8 z-10">
+        <div class="max-w-3xl mx-auto pt-6 pb-12">
+            <!-- Monkey icon -->
+            <div class="flex justify-center mb-8">
+                <img src="https://pfst.cf2.poecdn.net/base/image/7318dfa5a91f792ec17f53cd9209c8f07120e936815910ba646e1c4577a5c52a?w=1024&amp;h=1024" alt="Cool Monkey" class="w-40 h-40 md:w-52 md:h-52 object-contain animate-sway drop-shadow-xl">
+            </div>
+            
+            <!-- Input container -->
+            <div class="relative max-w-2xl mx-auto mb-12">
+                <div class="jungle-gradient backdrop-blur-sm rounded-2xl shadow-xl p-8 md:p-10">
+                    <h2 class="text-center text-2xl md:text-3xl font-bold mb-6 text-white">MonkyJam Music Generator</h2>
+                    <p class="text-center text-white text-opacity-90 mb-8">Enter a description to create your perfect music</p>
+                    
+                    <!-- Info Alert for Public Demo -->
+                    <div class="mb-6 p-3 bg-yellow-500/20 border border-yellow-500/40 rounded-lg text-yellow-200 text-sm text-center">
+                        <p><i class="fas fa-info-circle mr-1"></i> This is a demo UI. For full functionality, the backend service needs to be running at the configured API URL.</p>
+                    </div>
+                    
+                    <!-- Prompt input -->
+                    <div class="mb-6">
+                        <textarea 
+                            id="prompt" 
+                            placeholder="Example: A peaceful piano melody with soft strings in the background, creating a dreamy atmosphere..." 
+                            class="w-full p-4 text-base rounded-xl bg-white/90 dark:bg-jungle-dark/80 border-2 border-jungle-leaf/30 text-jungle-dark dark:text-jungle-leaf placeholder-jungle-dark/50 dark:placeholder-jungle-leaf/50 focus:outline-none focus:ring-2 focus:ring-jungle-leaf/70 h-24 transition-all duration-300"
+                        ></textarea>
+                    </div>
+
+                    <!-- Instrumental Mode Toggle -->
+                    <div class="toggle flex items-center justify-center gap-3 mb-6">
+                        <input type="checkbox" id="instrumental" checked class="sr-only">
+                        <div class="relative w-14 h-7 bg-white/30 rounded-full cursor-pointer transition-colors duration-300" id="toggle-bg">
+                            <div class="absolute left-1 top-1 bg-white w-5 h-5 rounded-full transition-all duration-300 transform" id="toggle-button"></div>
+                        </div>
+                        <label for="instrumental" class="text-white cursor-pointer">Instrumental Mode</label>
+                    </div>
+                    
+                    <!-- Generate Button -->
+                    <div class="text-center">
+                        <button id="generateBtn" onclick="generateMusic()" disabled class="px-8 py-3 bg-jungle-leaf hover:bg-white text-jungle-dark font-bold rounded-xl transition duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:hover:bg-jungle-leaf">
+                            <i class="fas fa-music mr-2"></i>Generate Music
+                            <div class="loading" id="loading"></div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Error Message -->
+            <div id="error" class="hidden max-w-2xl mx-auto mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-500 text-center"></div>
+            
+            <!-- Audio Player -->
+            <audio id="audioPlayer" controls class="hidden w-full max-w-2xl mx-auto rounded-xl">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+    </div>
+
+    <script>
+        // Create animated jungle leaves
+        function createLeaves() {
+            const leavesContainer = document.getElementById('leaves-container');
+            const leafShapes = [
+                '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.5 12C17.5 15.5899 14.5899 18.5 11 18.5C7.41015 18.5 4.5 15.5899 4.5 12C4.5 8.41015 7.41015 5.5 11 5.5C14.5899 5.5 17.5 8.41015 17.5 12Z" stroke="#A4BE7B" stroke-width="2"/></svg>',
+                '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 6L18 13.5L12 21L6 13.5L12 6Z" fill="#5F8D4E" fill-opacity="0.7"/></svg>',
+                '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18C8.68629 18 6 15.3137 6 12Z" fill="#E5D9B6" fill-opacity="0.6"/></svg>'
+            ];
+            
+            for (let i = 0; i < 15; i++) {
+                const leaf = document.createElement('div');
+                leaf.classList.add('leaf');
+                leaf.style.left = `${Math.random() * 100}vw`;
+                leaf.style.setProperty('--leaf-speed', Math.random().toString());
+                leaf.innerHTML = leafShapes[Math.floor(Math.random() * leafShapes.length)];
+                leavesContainer.appendChild(leaf);
+            }
+        }
+
+        // Initialize leaves
+        createLeaves();
+
+        // Add input listener for button enable/disable
+        const promptInput = document.getElementById('prompt');
+        const generateBtn = document.getElementById('generateBtn');
+        const instrumentalToggle = document.getElementById('instrumental');
+        const toggleBg = document.getElementById('toggle-bg');
+        const toggleButton = document.getElementById('toggle-button');
+
+        promptInput.addEventListener('input', function() {
+            generateBtn.disabled = !this.value.trim();
+        });
+
+        // Add click handler for the toggle
+        toggleBg.addEventListener('click', function() {
+            instrumentalToggle.checked = !instrumentalToggle.checked;
+            updateToggleState();
+        });
+
+        function updateToggleState() {
+            if (instrumentalToggle.checked) {
+                toggleBg.classList.add('bg-jungle-leaf');
+                toggleBg.classList.remove('bg-white/30');
+                toggleButton.style.transform = 'translateX(1.75rem)';
+            } else {
+                toggleBg.classList.remove('bg-jungle-leaf');
+                toggleBg.classList.add('bg-white/30');
+                toggleButton.style.transform = 'translateX(0)';
+            }
+            console.log('Instrumental mode:', instrumentalToggle.checked);
+        }
+
+        // Initialize toggle state
+        updateToggleState();
+
+        async function generateMusic() {
+            const prompt = document.getElementById('prompt').value;
+            const instrumental = document.getElementById('instrumental').checked;
+            const generateBtn = document.getElementById('generateBtn');
+            const loading = document.getElementById('loading');
+            const error = document.getElementById('error');
+            const audioPlayer = document.getElementById('audioPlayer');
+
+            if (!prompt.trim()) {
+                error.textContent = '⚠️ Please enter a description for your music';
+                error.classList.remove('hidden');
+                return;
+            }
+
+            try {
+                generateBtn.disabled = true;
+                loading.style.display = 'inline-block';
+                error.classList.add('hidden');
+                audioPlayer.classList.add('hidden');
+
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        prompt,
+                        instrumental
+                    }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Server returned ${response.status}: ${response.statusText}`);
+                }
+
+                const blob = await response.blob();
+                
+                if (blob.size < 1000) {
+                    throw new Error('Generated file is too small. The backend may not be functioning correctly.');
+                }
+                
+                const audioUrl = URL.createObjectURL(blob);
+                audioPlayer.src = audioUrl;
+                audioPlayer.classList.remove('hidden');
+                audioPlayer.play();
+            } catch (err) {
+                console.error('Error generating music:', err);
+                error.textContent = `⚠️ ${err.message || 'Failed to generate music. Is the backend server running?'}`;
+                error.classList.remove('hidden');
+            } finally {
+                generateBtn.disabled = false;
+                loading.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html> 
