@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Music Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --primary-hover: #4338CA;
+            --background: #111827;
+            --surface: #1F2937;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--background), #0F172A);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: var(--surface);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            margin-top: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            margin: 1rem 0;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            resize: vertical;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3);
+        }
+        
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.875rem 1.5rem;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover:not(:disabled) {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+        
+        button:disabled {
+            background: #4B5563;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        .toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 1.5rem 0;
+        }
+        
+        .toggle input[type="checkbox"] {
+            appearance: none;
+            width: 3rem;
+            height: 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 999px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .toggle input[type="checkbox"]::before {
+            content: '';
+            position: absolute;
+            width: 1.25rem;
+            height: 1.25rem;
+            border-radius: 50%;
+            background: white;
+            top: 0.125rem;
+            left: 0.125rem;
+            transition: all 0.3s ease;
+        }
+        
+        .toggle input[type="checkbox"]:checked {
+            background: var(--primary);
+        }
+        
+        .toggle input[type="checkbox"]:checked::before {
+            transform: translateX(1.5rem);
+        }
+        
+        #audioPlayer {
+            width: 100%;
+            margin-top: 1.5rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .loading {
+            display: none;
+            position: relative;
+            width: 1.25rem;
+            height: 1.25rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .error {
+            color: #EF4444;
+            margin-top: 0.75rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            background: rgba(239, 68, 68, 0.1);
+            display: none;
+        }
+        
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #818CF8, #6366F1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+        
+        p {
+            color: #9CA3AF;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            font-weight: 500;
+            color: #E5E7EB;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎵 AI Music Generator</h1>
+        <p>Transform your musical ideas into reality using advanced AI. Simply describe the music you want to hear, and watch the magic happen.</p>
+        
+        <div>
+            <label for="prompt">Describe your music:</label>
+            <textarea 
+                id="prompt" 
+                rows="4" 
+                placeholder="Example: A peaceful piano melody with soft strings in the background, creating a dreamy atmosphere..."
+            ></textarea>
+        </div>
+
+        <div class="toggle">
+            <input type="checkbox" id="instrumental" checked>
+            <label for="instrumental">Instrumental Mode</label>
+        </div>
+
+        <button id="generateBtn" onclick="generateMusic()">
+            <span>🎵</span>
+            Generate Music
+            <div class="loading" id="loading"></div>
+        </button>
+
+        <div class="error" id="error"></div>
+
+        <audio id="audioPlayer" controls style="display: none;">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+    <script>
+        async function generateMusic() {
+            const prompt = document.getElementById('prompt').value;
+            const instrumental = document.getElementById('instrumental').checked;
+            const generateBtn = document.getElementById('generateBtn');
+            const loading = document.getElementById('loading');
+            const error = document.getElementById('error');
+            const audioPlayer = document.getElementById('audioPlayer');
+
+            if (!prompt.trim()) {
+                error.textContent = '⚠️ Please enter a description for your music';
+                error.style.display = 'block';
+                return;
+            }
+
+            try {
+                generateBtn.disabled = true;
+                loading.style.display = 'inline-block';
+                error.style.display = 'none';
+                audioPlayer.style.display = 'none';
+
+                const response = await fetch('http://localhost:8001/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        prompt,
+                        instrumental
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to generate music. Please try again.');
+                }
+
+                const data = await response.json();
+                
+                if (!data.audio) {
+                    throw new Error('No audio data received. Please try again.');
+                }
+
+                audioPlayer.src = `data:audio/wav;base64,${data.audio}`;
+                audioPlayer.style.display = 'block';
+                await audioPlayer.play();
+
+            } catch (err) {
+                console.error('Error:', err);
+                error.textContent = `⚠️ ${err.message || 'Failed to generate music. Please try again.'}`;
+                error.style.display = 'block';
+            } finally {
+                generateBtn.disabled = false;
+                loading.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html> 

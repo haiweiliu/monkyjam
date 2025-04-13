@@ -1,9 +1,11 @@
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: http://localhost:8000 https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com https://api-inference.huggingface.co; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wise Monkey Music</title>
+    <title>MonkyJam Music Generator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/universal-sentence-encoder"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -114,64 +116,49 @@
             <!-- Input container -->
             <div class="relative max-w-2xl mx-auto mb-12">
                 <div class="jungle-gradient backdrop-blur-sm rounded-2xl shadow-xl p-8 md:p-10">
-                    <h2 class="text-center text-2xl md:text-3xl font-bold mb-6 text-white">Music from the Wise Monkey</h2>
-                    <p class="text-center text-white text-opacity-90 mb-8">Enter a vibe, emotion, or scene to create your perfect jungle music</p>
+                    <h2 class="text-center text-2xl md:text-3xl font-bold mb-6 text-white">MonkyJam Music Generator</h2>
+                    <p class="text-center text-white text-opacity-90 mb-8">Enter a description to create your perfect music</p>
                     
                     <!-- Prompt input -->
                     <div class="mb-6">
-                        <textarea id="music-prompt" placeholder="How should your music feel? (e.g. peaceful waterfall meditation, joyful monkey dance, mysterious jungle night...)" class="w-full p-4 text-base rounded-xl bg-white/90 dark:bg-jungle-dark/80 border-2 border-jungle-leaf/30 text-jungle-dark dark:text-jungle-leaf placeholder-jungle-dark/50 dark:placeholder-jungle-leaf/50 focus:outline-none focus:ring-2 focus:ring-jungle-leaf/70 h-24 transition-all duration-300"></textarea>
+                        <textarea id="music-prompt" placeholder="Enter your music description (e.g. peaceful jungle meditation, energetic monkey dance...)" class="w-full p-4 text-base rounded-xl bg-white/90 dark:bg-jungle-dark/80 border-2 border-jungle-leaf/30 text-jungle-dark dark:text-jungle-leaf placeholder-jungle-dark/50 dark:placeholder-jungle-leaf/50 focus:outline-none focus:ring-2 focus:ring-jungle-leaf/70 h-24 transition-all duration-300"></textarea>
+                    </div>
+
+                    <!-- Instrumental Mode Toggle -->
+                    <div class="flex justify-end items-center mb-6">
+                        <span class="text-white mr-3">Instrumental Mode</span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="instrumental-mode" class="sr-only peer">
+                            <div class="w-11 h-6 bg-white/30 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-jungle-leaf"></div>
+                        </label>
                     </div>
                     
                     <!-- Generate Button -->
                     <div class="text-center">
                         <button id="generate-btn" class="px-8 py-3 bg-jungle-leaf hover:bg-white text-jungle-dark font-bold rounded-xl transition duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1">
-                            <i class="fas fa-music mr-2"></i>Create Jungle Music
+                            <i class="fas fa-music mr-2"></i>Generate Music
                         </button>
                     </div>
                 </div>
             </div>
             
+            <!-- Error Message -->
+            <div id="error-message" class="hidden max-w-2xl mx-auto mb-6 p-4 bg-red-500/20 rounded-xl text-center text-red-500">
+            </div>
+
             <!-- Music Player (Initially Hidden) -->
             <div id="player-container" class="hidden max-w-2xl mx-auto">
                 <div class="jungle-gradient backdrop-blur-sm rounded-2xl shadow-xl p-8">
-                    <!-- Music Visualization -->
-                    <div class="mb-6 h-32 bg-white/20 dark:bg-jungle-dark/40 rounded-xl p-2 flex items-end justify-center space-x-1">
-                        <div id="visualization" class="flex items-end justify-center space-x-1 w-full h-full">
-                            <!-- Visualization bars will be added here dynamically -->
-                        </div>
-                    </div>
-
+                    <audio id="audio-player" controls class="w-full mb-4">
+                        Your browser does not support the audio element.
+                    </audio>
+                    
                     <!-- Music Description -->
                     <div class="mb-6 p-4 bg-white/20 dark:bg-jungle-dark/40 rounded-xl">
-                        <h3 class="font-medium mb-2 text-white">Your Wise Monkey Creation:</h3>
+                        <h3 class="font-medium mb-2 text-white">Your MonkyJam Creation:</h3>
                         <p id="music-description" class="text-white text-opacity-90 italic"></p>
                     </div>
 
-                    <!-- Player Controls -->
-                    <div class="flex items-center justify-between bg-white/20 dark:bg-jungle-dark/40 rounded-xl p-4">
-                        <div>
-                            <span id="current-time" class="text-sm text-white">0:00</span>
-                            <span class="text-sm text-white text-opacity-80"> / </span>
-                            <span id="total-time" class="text-sm text-white text-opacity-80">0:00</span>
-                        </div>
-                        
-                        <div class="flex items-center space-x-4">
-                            <button id="play-pause-btn" class="w-14 h-14 flex items-center justify-center bg-jungle-leaf hover:bg-white text-jungle-dark rounded-full transition shadow-md">
-                                <i class="fas fa-play text-lg"></i>
-                            </button>
-                            <button id="stop-btn" class="w-10 h-10 flex items-center justify-center bg-white/30 hover:bg-white/60 text-white rounded-full transition">
-                                <i class="fas fa-stop"></i>
-                            </button>
-                        </div>
-                        
-                        <div class="flex items-center">
-                            <button id="volume-btn" class="text-white">
-                                <i class="fas fa-volume-up"></i>
-                            </button>
-                            <input type="range" id="volume" min="0" max="100" value="80" class="w-20 ml-2 accent-jungle-leaf">
-                        </div>
-                    </div>
-                    
                     <!-- Create New Button -->
                     <div class="text-center mt-6">
                         <button id="new-music-btn" class="px-6 py-2 bg-white/30 hover:bg-white/50 text-white rounded-lg transition">
@@ -192,318 +179,170 @@
     </div>
 
     <script>
-        // Create animated jungle leaves
+        // Initialize UI elements
+        const generateBtn = document.getElementById('generate-btn');
+        const musicPrompt = document.getElementById('music-prompt');
+        const loadingContainer = document.getElementById('loading-container');
+        const playerContainer = document.getElementById('player-container');
+        const errorMessage = document.getElementById('error-message');
+        const newMusicBtn = document.getElementById('new-music-btn');
+        const audioPlayer = document.getElementById('audio-player');
+        const musicDescription = document.getElementById('music-description');
+        const instrumentalMode = document.getElementById('instrumental-mode');
+
+        // Meta API configuration with proxy to handle CORS
+        const PROXY_URL = 'http://localhost:8000/generate';
+
+        // Event listeners
+        generateBtn.addEventListener('click', generateMusic);
+        newMusicBtn.addEventListener('click', resetUI);
+
+        async function generateMusic() {
+            const prompt = musicPrompt.value.trim();
+            if (!prompt) {
+                alert('Please enter a description for your music');
+                return;
+            }
+
+            showLoading();
+            hideError();
+
+            try {
+                console.log('Sending request to proxy...');
+                const response = await fetch(PROXY_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        prompt: instrumentalMode.checked ? prompt + " [instrumental]" : prompt
+                    }),
+                });
+
+                console.log('Response status:', response.status);
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('API Error:', errorText);
+                    throw new Error(`Failed to generate music: ${response.status} ${errorText}`);
+                }
+
+                console.log('Converting response to audio blob...');
+                const response_data = await response.json();
+                const base64Audio = response_data.audio;
+                
+                // Convert base64 to binary
+                const binaryStr = atob(base64Audio);
+                const bytes = new Uint8Array(binaryStr.length);
+                for (let i = 0; i < binaryStr.length; i++) {
+                    bytes[i] = binaryStr.charCodeAt(i);
+                }
+                
+                // Create audio blob
+                const audioBlob = new Blob([bytes], { type: 'audio/wav' });
+                console.log('Audio blob size:', audioBlob.size);
+                
+                const audioUrl = URL.createObjectURL(audioBlob);
+                console.log('Created audio URL:', audioUrl);
+                
+                // Reset audio player
+                audioPlayer.pause();
+                audioPlayer.currentTime = 0;
+                
+                // Set new source and load
+                audioPlayer.src = audioUrl;
+                audioPlayer.load();
+                
+                // Add event listeners for debugging
+                audioPlayer.addEventListener('loadeddata', () => {
+                    console.log('Audio loaded successfully');
+                    console.log('Audio duration:', audioPlayer.duration);
+                });
+                
+                audioPlayer.addEventListener('error', (e) => {
+                    console.error('Audio loading error:', e);
+                    console.error('Error code:', audioPlayer.error.code);
+                    console.error('Error message:', audioPlayer.error.message);
+                    showError();
+                    errorMessage.textContent = `Error loading audio: ${audioPlayer.error.message}`;
+                });
+                
+                musicDescription.textContent = prompt;
+                
+                hideLoading();
+                showPlayer();
+                
+                try {
+                    await audioPlayer.play();
+                } catch (playError) {
+                    console.warn('Auto-play failed:', playError);
+                }
+            } catch (error) {
+                console.error('Error generating music:', error);
+                hideLoading();
+                showError();
+                errorMessage.textContent = `Error: ${error.message}`;
+            }
+        }
+
+        function showLoading() {
+            loadingContainer.classList.remove('hidden');
+            generateBtn.disabled = true;
+            playerContainer.classList.add('hidden');
+        }
+
+        function hideLoading() {
+            loadingContainer.classList.add('hidden');
+            generateBtn.disabled = false;
+        }
+
+        function showPlayer() {
+            playerContainer.classList.remove('hidden');
+        }
+
+        function showError() {
+            errorMessage.classList.remove('hidden');
+        }
+
+        function hideError() {
+            errorMessage.classList.add('hidden');
+        }
+
+        function resetUI() {
+            musicPrompt.value = '';
+            playerContainer.classList.add('hidden');
+            hideError();
+            audioPlayer.pause();
+            audioPlayer.currentTime = 0;
+        }
+
+        // Create animated leaves
         function createLeaves() {
             const leavesContainer = document.getElementById('leaves-container');
             const leafShapes = [
                 '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.5 12C17.5 15.5899 14.5899 18.5 11 18.5C7.41015 18.5 4.5 15.5899 4.5 12C4.5 8.41015 7.41015 5.5 11 5.5C14.5899 5.5 17.5 8.41015 17.5 12Z" stroke="#A4BE7B" stroke-width="2"/></svg>',
                 '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 6L18 13.5L12 21L6 13.5L12 6Z" fill="#5F8D4E" fill-opacity="0.7"/></svg>',
-                '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18C8.68629 18 6 15.3137 6 12Z" fill="#E5D9B6" fill-opacity="0.6"/></svg>'
             ];
-            
-            for (let i = 0; i < 15; i++) {
+
+            function createLeaf() {
                 const leaf = document.createElement('div');
-                leaf.classList.add('leaf');
-                leaf.style.left = `${Math.random() * 100}vw`;
-                leaf.style.setProperty('--leaf-speed', Math.random().toString());
+                leaf.className = 'leaf';
+                leaf.style.setProperty('--leaf-speed', Math.random());
+                leaf.style.left = Math.random() * 100 + 'vw';
                 leaf.innerHTML = leafShapes[Math.floor(Math.random() * leafShapes.length)];
                 leavesContainer.appendChild(leaf);
+
+                leaf.addEventListener('animationend', () => {
+                    leaf.remove();
+                });
             }
-        }
-        
-        // DOM Elements
-        const musicPrompt = document.getElementById('music-prompt');
-        const generateBtn = document.getElementById('generate-btn');
-        const playerContainer = document.getElementById('player-container');
-        const loadingContainer = document.getElementById('loading-container');
-        const playPauseBtn = document.getElementById('play-pause-btn');
-        const stopBtn = document.getElementById('stop-btn');
-        const currentTimeDisplay = document.getElementById('current-time');
-        const totalTimeDisplay = document.getElementById('total-time');
-        const visualizationContainer = document.getElementById('visualization');
-        const musicDescription = document.getElementById('music-description');
-        const volumeBtn = document.getElementById('volume-btn');
-        const volumeSlider = document.getElementById('volume');
-        const newMusicBtn = document.getElementById('new-music-btn');
-        
-        // Initialize visualization bars
-        const numBars = 32;
-        for (let i = 0; i < numBars; i++) {
-            const bar = document.createElement('div');
-            bar.classList.add('visualization-bar', 'bg-jungle-leaf', 'dark:bg-jungle-leaf', 'rounded-t-sm', 'w-2');
-            bar.style.height = '10%';
-            // Store the index for use in visualization calculations
-            bar.dataset.index = i.toString();
-            visualizationContainer.appendChild(bar);
+
+            setInterval(createLeaf, 3000);
+            for (let i = 0; i < 5; i++) createLeaf();
         }
 
-        // Create animated leaves background
+        // Start the leaves animation
         createLeaves();
-
-        // Event Listeners
-        generateBtn.addEventListener('click', generateMusic);
-        playPauseBtn.addEventListener('click', togglePlayPause);
-        stopBtn.addEventListener('click', stopMusic);
-        volumeSlider.addEventListener('input', updateVolume);
-        volumeBtn.addEventListener('click', toggleMute);
-        newMusicBtn.addEventListener('click', () => {
-            playerContainer.classList.add('hidden');
-            document.querySelector('.max-w-2xl.mx-auto.mb-12').classList.remove('hidden');
-            musicPrompt.value = '';
-            musicPrompt.focus();
-        });
-
-        // Variables for music playback simulation
-        let isPlaying = false;
-        let isMuted = false;
-        let currentTime = 0;
-        let totalTime = 0;
-        let playbackInterval;
-        let visualizationInterval;
-        let previousVolume = 80;
-
-        async function generateMusic() {
-            const prompt = musicPrompt.value.trim();
-            
-            if (!prompt) {
-                // Highlight the input field if empty
-                musicPrompt.classList.add('ring-2', 'ring-red-500');
-                setTimeout(() => {
-                    musicPrompt.classList.remove('ring-2', 'ring-red-500');
-                }, 2000);
-                return;
-            }
-            
-            // Hide input container, show loading
-            document.querySelector('.max-w-2xl.mx-auto.mb-12').classList.add('hidden');
-            loadingContainer.classList.remove('hidden');
-            
-            try {
-                // Create the prompt for Claude to generate a music description
-                const claudePrompt = `@Claude-3.7-Sonnet I need a detailed description of a zen/meditation music piece created by a wise monkey guitarist living in the jungle. The music should reflect this vibe: "${prompt}".
-                
-                Describe this music in about 3-4 sentences, focusing on:
-                - How the jungle sounds are incorporated
-                - The emotions it evokes
-                - What instruments are being used (especially acoustic guitar)
-                - How it creates a relaxing atmosphere
-                
-                Be poetic but specific about the sounds. Provide ONLY the description with no explanations or additional text.`;
-                
-                // Send the request to Claude using the Poe API
-                const result = await window.Poe.sendUserMessage(claudePrompt, {
-                    handler: "music-description-handler",
-                    stream: false,
-                    openChat: false
-                });
-                
-                // Register a handler outside the function to avoid any timing issues
-                if (!window.musicHandlerRegistered) {
-                    window.Poe.registerHandler("music-description-handler", (result) => {
-                        if (result.status === "complete" && result.responses.length > 0) {
-                            // Show the player, hide loading animation
-                            loadingContainer.classList.add('hidden');
-                            playerContainer.classList.remove('hidden');
-                            
-                            // Set the music description from Claude's response
-                            musicDescription.textContent = result.responses[0].content.trim();
-                            
-                            // Set up simulated playback (random duration between 2-4 minutes)
-                            const duration = 2 + Math.floor(Math.random() * 3);
-                            setupMusicPlayback(duration);
-                        } else if (result.status === "error") {
-                            handleError("Sorry, there was an error generating your music. Please try again.");
-                        }
-                    });
-                    window.musicHandlerRegistered = true;
-                }
-            } catch (error) {
-                handleError("Sorry, there was an error connecting to the Wise Monkey. Please try again.");
-            }
-        }
-
-        function handleError(message) {
-            loadingContainer.classList.add('hidden');
-            document.querySelector('.max-w-2xl.mx-auto.mb-12').classList.remove('hidden');
-            
-            // Show error message
-            const errorEl = document.createElement('div');
-            errorEl.className = 'text-center mt-4 text-red-500 bg-white/80 dark:bg-jungle-dark/80 p-3 rounded-lg';
-            errorEl.textContent = message;
-            
-            const container = document.querySelector('.max-w-2xl.mx-auto.mb-12');
-            container.appendChild(errorEl);
-            
-            setTimeout(() => {
-                container.removeChild(errorEl);
-            }, 4000);
-        }
-
-        function setupMusicPlayback(durationInMinutes) {
-            // Convert duration to seconds
-            totalTime = durationInMinutes * 60;
-            currentTime = 0;
-            
-            // Update displays
-            updateTimeDisplay();
-            
-            // Start playing automatically
-            togglePlayPause();
-        }
-
-        function togglePlayPause() {
-            if (isPlaying) {
-                pauseMusic();
-            } else {
-                playMusic();
-            }
-        }
-
-        function playMusic() {
-            isPlaying = true;
-            playPauseBtn.innerHTML = '<i class="fas fa-pause text-lg"></i>';
-            
-            // Start time update interval
-            playbackInterval = setInterval(() => {
-                currentTime += 1;
-                if (currentTime >= totalTime) {
-                    stopMusic();
-                    return;
-                }
-                updateTimeDisplay();
-            }, 1000);
-            
-            // Start visualization
-            startVisualization();
-        }
-
-        function pauseMusic() {
-            isPlaying = false;
-            playPauseBtn.innerHTML = '<i class="fas fa-play text-lg"></i>';
-            
-            // Clear intervals
-            clearInterval(playbackInterval);
-            clearInterval(visualizationInterval);
-            
-            // Remove the pulse animation
-            playerContainer.classList.remove('animate-pulse-slow');
-            
-            // Change the "Now Playing" indicator to "Paused"
-            const indicator = document.getElementById('now-playing-indicator');
-            if (indicator) {
-                indicator.innerHTML = '<span class="inline-block h-3 w-3 rounded-full bg-yellow-400 mr-2"></span> Paused';
-            }
-        }
-
-        function stopMusic() {
-            pauseMusic();
-            currentTime = 0;
-            updateTimeDisplay();
-            resetVisualization();
-        }
-
-        function updateTimeDisplay() {
-            currentTimeDisplay.textContent = formatTime(currentTime);
-            totalTimeDisplay.textContent = formatTime(totalTime);
-        }
-
-        function formatTime(seconds) {
-            const minutes = Math.floor(seconds / 60);
-            const remainingSeconds = seconds % 60;
-            return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
-        }
-
-        function startVisualization() {
-            const bars = visualizationContainer.querySelectorAll('.visualization-bar');
-            
-            // Clear previous interval if any
-            if (visualizationInterval) clearInterval(visualizationInterval);
-            
-            // Add "Now Playing" indicator next to the player
-            const nowPlayingIndicator = document.createElement('div');
-            nowPlayingIndicator.classList.add('absolute', 'top-4', 'right-4', 'text-white', 'flex', 'items-center');
-            nowPlayingIndicator.innerHTML = '<span class="animate-pulse inline-block h-3 w-3 rounded-full bg-green-400 mr-2"></span> Now Playing';
-            nowPlayingIndicator.id = 'now-playing-indicator';
-            
-            // Add the indicator if it doesn't exist yet
-            if (!document.getElementById('now-playing-indicator')) {
-                playerContainer.querySelector('.jungle-gradient').appendChild(nowPlayingIndicator);
-            }
-            
-            // Make the player container pulse slightly to indicate activity
-            playerContainer.classList.add('animate-pulse-slow');
-            
-            // Set up new visualization interval with more pronounced animation
-            visualizationInterval = setInterval(() => {
-                bars.forEach(bar => {
-                    // Use the bar's index to create a wave effect
-                    const index = parseInt(bar.dataset.index || '0');
-                    const phase = index * 0.2; // Offset phase for each bar
-                    
-                    // Create a more dynamic and visible animation
-                    const time = Date.now() / 1000;
-                    const baseHeight = 15 + Math.random() * 15; // More stable base
-                    const wave1 = 25 * Math.sin(time * 2 + phase); // Faster wave
-                    const wave2 = 15 * Math.sin(time * 0.5 + phase); // Slower wave
-                    
-                    // Calculate height with combined waves for more organic movement
-                    let height = baseHeight + wave1 + wave2;
-                    
-                    // Ensure height is between 15% and 95% (more visible range)
-                    height = Math.max(15, Math.min(95, height));
-                    
-                    // Apply the height with a subtle transition
-                    bar.style.height = `${height}%`;
-                });
-            }, 100); // Faster refresh rate for smoother animation
-        }
-
-        function resetVisualization() {
-            const bars = visualizationContainer.querySelectorAll('.visualization-bar');
-            bars.forEach(bar => {
-                bar.style.height = '10%';
-            });
-            
-            // Remove the "Now Playing" indicator
-            const indicator = document.getElementById('now-playing-indicator');
-            if (indicator) {
-                indicator.remove();
-            }
-            
-            // Remove pulse animation
-            playerContainer.classList.remove('animate-pulse-slow');
-        }
-
-        function updateVolume() {
-            // In a real player, this would adjust the audio volume
-            const volume = volumeSlider.value;
-            
-            // Update volume icon based on level
-            if (volume == 0) {
-                volumeBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
-                isMuted = true;
-            } else if (volume < 50) {
-                volumeBtn.innerHTML = '<i class="fas fa-volume-down"></i>';
-                isMuted = false;
-            } else {
-                volumeBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
-                isMuted = false;
-            }
-        }
-
-        function toggleMute() {
-            if (isMuted) {
-                // Unmute - restore previous volume
-                volumeSlider.value = previousVolume;
-                isMuted = false;
-            } else {
-                // Mute - save current volume and set to 0
-                previousVolume = volumeSlider.value;
-                volumeSlider.value = 0;
-                isMuted = true;
-            }
-            updateVolume();
-        }
     </script>
 
 
