@@ -42,9 +42,7 @@ ENV/
 ehthumbs.db
 Thumbs.db
 
+# Node
 node_modules/
 .env.local
 .next/
-*.pyc
-__pycache__/
-.DS_Store
