@@ -1,27 +1,12 @@
-<<<<<<< HEAD
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: http://localhost:8000 https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com https://api-inference.huggingface.co; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MonkyJam - AI Music Generator</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
-        // API Configuration - Change this to your deployed backend URL
-        const API_URL = 'https://your-deployed-backend-url.com/generate';
-        
-=======
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com https://api-inference.huggingface.co; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wise Monkey Music</title>
+    <title>MonkyJam Music Generator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/universal-sentence-encoder"></script>
     <script>
->>>>>>> c8983640bf335876c0d61f5e5d46b778ab581c9a
         tailwind.config = {
             darkMode: 'class',
             theme: {
@@ -54,12 +39,9 @@
                             '0%, 100%': { transform: 'rotate(-3deg)' },
                             '50%': { transform: 'rotate(3deg)' },
                         }
-<<<<<<< HEAD
-=======
                     },
                     backgroundImage: {
                         'jungle-pattern': "url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cpath d=\"M54.627 0l.83.828-1.415 1.415L51.8 0h2.827zM5.373 0l-.83.828L5.96 2.243 8.2 0H5.374zM48.97 0l3.657 3.657-1.414 1.414L46.143 0h2.828zM11.03 0L7.372 3.657 8.787 5.07 13.857 0H11.03zm32.284 0L49.8 6.485 48.384 7.9l-7.9-7.9h2.83zM16.686 0L10.2 6.485 11.616 7.9l7.9-7.9h-2.83zm20.97 0l9.315 9.314-1.414 1.414L34.828 0h2.83zM22.344 0L13.03 9.314l1.414 1.414L25.172 0h-2.83zM32 0l12.142 12.142-1.414 1.414L30 2.828 18.272 14.556l-1.414-1.414L28 0h4zM.284 0l28 28-1.414 1.414L0 2.544V0h.284zM0 5.373l25.456 25.455-1.414 1.415L0 8.2V5.374zm0 5.656l22.627 22.627-1.414 1.414L0 13.86v-2.83zm0 5.656l19.8 19.8-1.415 1.413L0 19.514v-2.83zm0 5.657l16.97 16.97-1.414 1.415L0 25.172v-2.83zM0 28l14.142 14.142-1.414 1.414L0 30.828V28zm0 5.657L11.314 44.97 9.9 46.386l-9.9-9.9v-2.828zm0 5.657L8.485 47.8 7.07 49.212 0 42.142v-2.83zm0 5.657l5.657 5.657-1.414 1.415L0 47.8v-2.83zm0 5.657l2.828 2.83-1.414 1.413L0 53.456v-2.83zM54.627 60L30 35.373 5.373 60H8.2L30 38.2 51.8 60h2.827zm-5.656 0L30 41.03 11.03 60h2.828L30 43.858 46.142 60h2.83zm-5.656 0L30 46.686 16.686 60h2.83L30 49.515 40.485 60h2.83zm-5.657 0L30 52.343 22.344 60h2.83L30 55.172 34.828 60h2.83zM32 60l-2-2-2 2h4zM59.716 0l-28 28 1.414 1.414L60 2.544V0h-.284zM60 5.373L34.544 30.828l1.414 1.415L60 8.2V5.374zm0 5.656L37.373 33.656l1.414 1.414L60 13.86v-2.83zm0 5.656l-19.8 19.8 1.415 1.413L60 19.514v-2.83zm0 5.657l-16.97 16.97 1.414 1.415L60 25.172v-2.83zM60 28L45.858 42.142l1.414 1.414L60 30.828V28zm0 5.657L48.686 44.97l1.415 1.415 9.9-9.9v-2.828zm0 5.657L51.515 47.8l1.414 1.413 7.07-7.07v-2.83zm0 5.657l-5.657 5.657 1.414 1.415L60 47.8v-2.83zm0 5.657l-2.828 2.83 1.414 1.413L60 53.456v-2.83zM39.9 16.385l1.414-1.414 1.413 1.414-1.414 1.414-1.414-1.414zm-4.243 4.242l1.415-1.414 1.414 1.414-1.414 1.414-1.415-1.414zm-4.242 4.243l1.414-1.414 1.414 1.414-1.414 1.414-1.414-1.414zm-4.243 4.242l1.414-1.414 1.414 1.414-1.414 1.414-1.414-1.414zm-4.243 4.242l1.414-1.414 1.415 1.414-1.415 1.414-1.414-1.414zm-4.242 4.242l1.414-1.414 1.414 1.415-1.414 1.414-1.414-1.415zm-4.242 4.242l1.414-1.414 1.414 1.414-1.414 1.414-1.414-1.414zm-4.243 4.242l1.414-1.414 1.414 1.414-1.414 1.415-1.414-1.415zm-4.242 4.242l1.414-1.414 1.414 1.414-1.414 1.415-1.414-1.415zM16.97 48.97l1.415-1.414 1.414 1.414-1.414 1.415-1.415-1.415zM12.727 52.97l1.414-1.414 1.414 1.414-1.414 1.414-1.414-1.414zM8.485 57.212l1.414-1.413 1.414 1.413-1.414 1.414-1.414-1.414z\" fill=\"%235F8D4E\" fill-opacity=\"0.1\" fill-rule=\"evenodd\"/%3E%3C/svg%3E')"
->>>>>>> c8983640bf335876c0d61f5e5d46b778ab581c9a
                     }
                 }
             }
@@ -73,13 +55,10 @@
             overflow-x: hidden;
         }
         
-<<<<<<< HEAD
-=======
         .visualization-bar {
             transition: height 0.5s ease;
         }
         
->>>>>>> c8983640bf335876c0d61f5e5d46b778ab581c9a
         .jungle-gradient {
             background: linear-gradient(to bottom, rgba(40, 84, 48, 0.8), rgba(95, 141, 78, 0.8));
         }
@@ -88,10 +67,7 @@
             background: linear-gradient(to bottom, rgba(40, 84, 48, 0.9), rgba(30, 60, 34, 0.9));
         }
         
-<<<<<<< HEAD
-=======
         /* Animated leaves */
->>>>>>> c8983640bf335876c0d61f5e5d46b778ab581c9a
         .leaf {
             position: absolute;
             opacity: 0.7;
@@ -109,26 +85,6 @@
                 transform: translateY(105vh) rotate(360deg);
             }
         }
-<<<<<<< HEAD
-
-        .loading {
-            display: none;
-            position: relative;
-            width: 1.25rem;
-            height: 1.25rem;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-=======
->>>>>>> c8983640bf335876c0d61f5e5d46b778ab581c9a
     </style>
 </head>
 <body class="transition-colors duration-300 bg-jungle-light dark:bg-jungle-dark text-jungle-darkBrown dark:text-jungle-leaf">
@@ -163,29 +119,6 @@
                     <h2 class="text-center text-2xl md:text-3xl font-bold mb-6 text-white">MonkyJam Music Generator</h2>
                     <p class="text-center text-white text-opacity-90 mb-8">Enter a description to create your perfect music</p>
                     
-<<<<<<< HEAD
-                    <!-- Info Alert for Public Demo -->
-                    <div class="mb-6 p-3 bg-yellow-500/20 border border-yellow-500/40 rounded-lg text-yellow-200 text-sm text-center">
-                        <p><i class="fas fa-info-circle mr-1"></i> This is a demo UI. For full functionality, the backend service needs to be running at the configured API URL.</p>
-                    </div>
-                    
-                    <!-- Prompt input -->
-                    <div class="mb-6">
-                        <textarea 
-                            id="prompt" 
-                            placeholder="Example: A peaceful piano melody with soft strings in the background, creating a dreamy atmosphere..." 
-                            class="w-full p-4 text-base rounded-xl bg-white/90 dark:bg-jungle-dark/80 border-2 border-jungle-leaf/30 text-jungle-dark dark:text-jungle-leaf placeholder-jungle-dark/50 dark:placeholder-jungle-leaf/50 focus:outline-none focus:ring-2 focus:ring-jungle-leaf/70 h-24 transition-all duration-300"
-                        ></textarea>
-                    </div>
-
-                    <!-- Instrumental Mode Toggle -->
-                    <div class="toggle flex items-center justify-center gap-3 mb-6">
-                        <input type="checkbox" id="instrumental" checked class="sr-only">
-                        <div class="relative w-14 h-7 bg-white/30 rounded-full cursor-pointer transition-colors duration-300" id="toggle-bg">
-                            <div class="absolute left-1 top-1 bg-white w-5 h-5 rounded-full transition-all duration-300 transform" id="toggle-button"></div>
-                        </div>
-                        <label for="instrumental" class="text-white cursor-pointer">Instrumental Mode</label>
-=======
                     <!-- Prompt input -->
                     <div class="mb-6">
                         <textarea id="music-prompt" placeholder="Enter your music description (e.g. peaceful jungle meditation, energetic monkey dance...)" class="w-full p-4 text-base rounded-xl bg-white/90 dark:bg-jungle-dark/80 border-2 border-jungle-leaf/30 text-jungle-dark dark:text-jungle-leaf placeholder-jungle-dark/50 dark:placeholder-jungle-leaf/50 focus:outline-none focus:ring-2 focus:ring-jungle-leaf/70 h-24 transition-all duration-300"></textarea>
@@ -198,33 +131,16 @@
                             <input type="checkbox" id="instrumental-mode" class="sr-only peer">
                             <div class="w-11 h-6 bg-white/30 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-jungle-leaf"></div>
                         </label>
->>>>>>> c8983640bf335876c0d61f5e5d46b778ab581c9a
                     </div>
                     
                     <!-- Generate Button -->
                     <div class="text-center">
-<<<<<<< HEAD
-                        <button id="generateBtn" onclick="generateMusic()" disabled class="px-8 py-3 bg-jungle-leaf hover:bg-white text-jungle-dark font-bold rounded-xl transition duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:hover:bg-jungle-leaf">
-                            <i class="fas fa-music mr-2"></i>Generate Music
-                            <div class="loading" id="loading"></div>
-=======
                         <button id="generate-btn" class="px-8 py-3 bg-jungle-leaf hover:bg-white text-jungle-dark font-bold rounded-xl transition duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1">
                             <i class="fas fa-music mr-2"></i>Generate Music
->>>>>>> c8983640bf335876c0d61f5e5d46b778ab581c9a
                         </button>
                     </div>
                 </div>
             </div>
-<<<<<<< HEAD
-
-            <!-- Error Message -->
-            <div id="error" class="hidden max-w-2xl mx-auto mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-500 text-center"></div>
-            
-            <!-- Audio Player -->
-            <audio id="audioPlayer" controls class="hidden w-full max-w-2xl mx-auto rounded-xl">
-                Your browser does not support the audio element.
-            </audio>
-=======
             
             <!-- Error Message -->
             <div id="error-message" class="hidden max-w-2xl mx-auto mb-6 p-4 bg-red-500/20 rounded-xl text-center text-red-500">
@@ -259,14 +175,10 @@
                     <p class="mt-6 text-xl text-white">The Wise Monkey is composing your music...</p>
                 </div>
             </div>
->>>>>>> c8983640bf335876c0d61f5e5d46b778ab581c9a
         </div>
     </div>
 
     <script>
-<<<<<<< HEAD
-        // Create animated jungle leaves
-=======
         // Initialize UI elements
         const generateBtn = document.getElementById('generate-btn');
         const musicPrompt = document.getElementById('music-prompt');
@@ -278,14 +190,8 @@
         const musicDescription = document.getElementById('music-description');
         const instrumentalMode = document.getElementById('instrumental-mode');
 
-        // Meta API configuration
-        const META_API_URL = 'https://api-inference.huggingface.co/models/facebook/musicgen-small';
-        
-        // Encrypted token (using a simple encryption for demonstration)
-        function decrypt(encrypted) {
-            return atob(encrypted.split('').reverse().join('')).split('').map(c => String.fromCharCode(c.charCodeAt(0) - 1)).join('');
-        }
-        const HF_API_TOKEN = decrypt('U1RUWVlQSUJkR1lUbFhJQ3NsaVFzV2ZoX2Zo');
+        // Meta API configuration with proxy to handle CORS
+        const PROXY_URL = 'http://localhost:8000/generate';
 
         // Event listeners
         generateBtn.addEventListener('click', generateMusic);
@@ -302,15 +208,14 @@
             hideError();
 
             try {
-                console.log('Sending request to MusicGen API...');
-                const response = await fetch(META_API_URL, {
+                console.log('Sending request to proxy...');
+                const response = await fetch(PROXY_URL, {
                     method: 'POST',
                     headers: {
-                        'Authorization': `Bearer ${HF_API_TOKEN}`,
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        inputs: instrumentalMode.checked ? prompt + " [instrumental]" : prompt
+                        prompt: instrumentalMode.checked ? prompt + " [instrumental]" : prompt
                     }),
                 });
 
@@ -323,19 +228,50 @@
                 }
 
                 console.log('Converting response to audio blob...');
-                const audioBlob = await response.blob();
+                const response_data = await response.json();
+                const base64Audio = response_data.audio;
+                
+                // Convert base64 to binary
+                const binaryStr = atob(base64Audio);
+                const bytes = new Uint8Array(binaryStr.length);
+                for (let i = 0; i < binaryStr.length; i++) {
+                    bytes[i] = binaryStr.charCodeAt(i);
+                }
+                
+                // Create audio blob
+                const audioBlob = new Blob([bytes], { type: 'audio/wav' });
                 console.log('Audio blob size:', audioBlob.size);
                 
                 const audioUrl = URL.createObjectURL(audioBlob);
                 console.log('Created audio URL:', audioUrl);
                 
+                // Reset audio player
+                audioPlayer.pause();
+                audioPlayer.currentTime = 0;
+                
+                // Set new source and load
                 audioPlayer.src = audioUrl;
+                audioPlayer.load();
+                
+                // Add event listeners for debugging
+                audioPlayer.addEventListener('loadeddata', () => {
+                    console.log('Audio loaded successfully');
+                    console.log('Audio duration:', audioPlayer.duration);
+                });
+                
+                audioPlayer.addEventListener('error', (e) => {
+                    console.error('Audio loading error:', e);
+                    console.error('Error code:', audioPlayer.error.code);
+                    console.error('Error message:', audioPlayer.error.message);
+                    showError();
+                    errorMessage.textContent = `Error loading audio: ${audioPlayer.error.message}`;
+                });
+                
                 musicDescription.textContent = prompt;
                 
                 hideLoading();
                 showPlayer();
                 
-                // Auto-play the generated music
                 try {
                     await audioPlayer.play();
                 } catch (playError) {
@@ -381,120 +317,11 @@
         }
 
         // Create animated leaves
->>>>>>> c8983640bf335876c0d61f5e5d46b778ab581c9a
         function createLeaves() {
             const leavesContainer = document.getElementById('leaves-container');
             const leafShapes = [
                 '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.5 12C17.5 15.5899 14.5899 18.5 11 18.5C7.41015 18.5 4.5 15.5899 4.5 12C4.5 8.41015 7.41015 5.5 11 5.5C14.5899 5.5 17.5 8.41015 17.5 12Z" stroke="#A4BE7B" stroke-width="2"/></svg>',
                 '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 6L18 13.5L12 21L6 13.5L12 6Z" fill="#5F8D4E" fill-opacity="0.7"/></svg>',
-<<<<<<< HEAD
-                '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 12C6 8.68629 8.68629 6 12 6C15.3137 6 18 8.68629 18 12C18 15.3137 15.3137 18 12 18C8.68629 18 6 15.3137 6 12Z" fill="#E5D9B6" fill-opacity="0.6"/></svg>'
-            ];
-            
-            for (let i = 0; i < 15; i++) {
-                const leaf = document.createElement('div');
-                leaf.classList.add('leaf');
-                leaf.style.left = `${Math.random() * 100}vw`;
-                leaf.style.setProperty('--leaf-speed', Math.random().toString());
-                leaf.innerHTML = leafShapes[Math.floor(Math.random() * leafShapes.length)];
-                leavesContainer.appendChild(leaf);
-            }
-        }
-
-        // Initialize leaves
-        createLeaves();
-
-        // Add input listener for button enable/disable
-        const promptInput = document.getElementById('prompt');
-        const generateBtn = document.getElementById('generateBtn');
-        const instrumentalToggle = document.getElementById('instrumental');
-        const toggleBg = document.getElementById('toggle-bg');
-        const toggleButton = document.getElementById('toggle-button');
-
-        promptInput.addEventListener('input', function() {
-            generateBtn.disabled = !this.value.trim();
-        });
-
-        // Add click handler for the toggle
-        toggleBg.addEventListener('click', function() {
-            instrumentalToggle.checked = !instrumentalToggle.checked;
-            updateToggleState();
-        });
-
-        function updateToggleState() {
-            if (instrumentalToggle.checked) {
-                toggleBg.classList.add('bg-jungle-leaf');
-                toggleBg.classList.remove('bg-white/30');
-                toggleButton.style.transform = 'translateX(1.75rem)';
-            } else {
-                toggleBg.classList.remove('bg-jungle-leaf');
-                toggleBg.classList.add('bg-white/30');
-                toggleButton.style.transform = 'translateX(0)';
-            }
-            console.log('Instrumental mode:', instrumentalToggle.checked);
-        }
-
-        // Initialize toggle state
-        updateToggleState();
-
-        async function generateMusic() {
-            const prompt = document.getElementById('prompt').value;
-            const instrumental = document.getElementById('instrumental').checked;
-            const generateBtn = document.getElementById('generateBtn');
-            const loading = document.getElementById('loading');
-            const error = document.getElementById('error');
-            const audioPlayer = document.getElementById('audioPlayer');
-
-            if (!prompt.trim()) {
-                error.textContent = '⚠️ Please enter a description for your music';
-                error.classList.remove('hidden');
-                return;
-            }
-
-            try {
-                generateBtn.disabled = true;
-                loading.style.display = 'inline-block';
-                error.classList.add('hidden');
-                audioPlayer.classList.add('hidden');
-
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        prompt,
-                        instrumental
-                    }),
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Server returned ${response.status}: ${response.statusText}`);
-                }
-
-                const blob = await response.blob();
-                
-                if (blob.size < 1000) {
-                    throw new Error('Generated file is too small. The backend may not be functioning correctly.');
-                }
-                
-                const audioUrl = URL.createObjectURL(blob);
-                audioPlayer.src = audioUrl;
-                audioPlayer.classList.remove('hidden');
-                audioPlayer.play();
-            } catch (err) {
-                console.error('Error generating music:', err);
-                error.textContent = `⚠️ ${err.message || 'Failed to generate music. Is the backend server running?'}`;
-                error.classList.remove('hidden');
-            } finally {
-                generateBtn.disabled = false;
-                loading.style.display = 'none';
-            }
-        }
-    </script>
-</body>
-</html> 
-=======
             ];
 
             function createLeaf() {
@@ -520,4 +347,3 @@
 
 
 </body></html>
->>>>>>> c8983640bf335876c0d61f5e5d46b778ab581c9a
